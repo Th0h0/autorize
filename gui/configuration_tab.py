@@ -35,6 +35,14 @@ class ConfigurationTab():
         self._extender.autoScroll = JCheckBox("Auto Scroll")
         self._extender.autoScroll.setBounds(145, 80, 130, 30)
 
+        ### Add Rate Limiting label
+        self._extender.rateLimiting = JLabel("Delay/req")
+        self._extender.rateLimiting.setBounds(10, 48, 60, 30)
+        #### Add Rate Limiting text field
+        self._extender.rateLimitingInput = JTextArea("1", 1, 3)
+        self._extender.rateLimitingInput.setBounds(76, 53, 25, 22)
+
+
         self._extender.ignore304 = JCheckBox("Ignore 304/204 status code responses")
         self._extender.ignore304.setBounds(280, 5, 300, 30)
         self._extender.ignore304.setSelected(True)
@@ -102,6 +110,11 @@ class ConfigurationTab():
         self.config_pnl.setLayout(None)
         self.config_pnl.add(self._extender.startButton)
         self.config_pnl.add(self._extender.clearButton)
+        ## Add Rate Limiting label
+        self.config_pnl.add(self._extender.rateLimiting)
+        ## Add Rate Limiting text field
+        self.config_pnl.add(self._extender.rateLimitingInput)
+
         self.config_pnl.add(scrollReplaceString)
         self.config_pnl.add(fromLastRequestLabel)
         self.config_pnl.add(self._extender.saveHeadersButton)
