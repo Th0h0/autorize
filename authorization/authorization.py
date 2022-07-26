@@ -1,11 +1,15 @@
 #!/usr/bin/env python
 # -*- coding: utf-8 -*- 
 
-import sys  
+import sys
+import time
+import threading
 reload(sys)  
 
 sys.setdefaultencoding('utf8')
 sys.path.append("..")
+
+lock = threading.Lock()
 
 from helpers.http import get_authorization_header_from_message, get_cookie_header_from_message, isStatusCodesReturned, makeMessage, makeRequest, getResponseContentLength, IHttpRequestResponseImplementation
 from gui.table import LogEntry, UpdateTableEDT
@@ -188,7 +192,15 @@ def send_request_to_autorize(self, messageInfo):
         httpService = messageInfo.getHttpService()
         newHttpRequestResponse = IHttpRequestResponseImplementation(httpService,request,response)
         newHttpRequestResponsePersisted = self._callbacks.saveBuffersToTempFiles(newHttpRequestResponse)
+
+
+        rateLimiting = float(self.rateLimitingInput.getText())
+        lock.acquire()
+
+        time.sleep(rateLimiting)
         checkAuthorization(self, newHttpRequestResponsePersisted,self._helpers.analyzeResponse(messageInfo.getResponse()).getHeaders(),self.doUnauthorizedRequest.isSelected())
+
+        lock.release()
 
 def auth_enforced_via_enforcement_detectors(self, filters, requestResponse, andOrEnforcement):
     response = requestResponse.getResponse()
